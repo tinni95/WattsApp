@@ -228,11 +228,10 @@ headerContainer: {
 },
 DiscoverContainer: {
   margin:10,
-  height:300,
+  height:320,
   borderRadius:10,
-  borderWidth: 1,
+  borderWidth: 0.3,
   borderColor: 'gray',
-  backgroundColor:'blue',
 },
 header: {
   fontSize:32,
@@ -247,7 +246,7 @@ Title: {
 Location: {
   fontSize:22,
   marginLeft:10,
-  marginBottom:5,
+  marginBottom:10,
   color:'black',
   fontWeight:'bold',
 },
@@ -265,7 +264,14 @@ Date:{
   fontWeight:'bold',
 },
 footer:{
-  marginTop:155,
+  ...Platform.select({
+    ios: {
+    marginTop:165,
+    },
+    android: {
+    marginTop:160,
+    },
+  }),
 },
 image:{
   width:80,

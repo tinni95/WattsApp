@@ -10,7 +10,6 @@ Text,
 TouchableOpacity,
 View,
 TextInput,
-Animated,
 RefreshControl,
 Easing
 } from 'react-native';
@@ -206,6 +205,7 @@ DateAndTime= (Time,Date) => {
     </View>
   );
 }
+
 attending= ()=>{
   const {navigate} = this.props.navigation;
   const list = this.renderUsers();
@@ -225,8 +225,6 @@ attending= ()=>{
   </ScrollView>
   );
 }
-
-
 
 body= ()=>{
 const { navigation } = this.props;
@@ -281,22 +279,22 @@ renderUsers = () => {
   return list
 }
 
-face = (EventId) => {
+faceButton = (EventId) => {
   if(!this.state.loading){
-return(
-  <TouchableOpacity style={{height:85}} onPress={()=> this.faceSwap(EventId)} >
-    <Icon containerStyle={{left:("40%"),marginTop:20}} size={60} color="white" name={this.state.face} type='ionicon' />
-  </TouchableOpacity>
-);
-}
-else{
-  return(
-    <View style={{height:85}}>
-      <Icon containerStyle={{left:("40%"),marginTop:20}} size={60} color="white" name={this.state.face} type='ionicon' />
-    </View>
-  );
-}
-}
+    return(
+      <TouchableOpacity style={{height:85}} onPress={()=> this.faceSwap(EventId)} >
+        <Icon containerStyle={{left:("40%"),marginTop:20}} size={60} color="white" name={this.state.face} type='ionicon' />
+      </TouchableOpacity>
+    );
+    }
+  else{
+      return(
+        <View style={{height:85}}>
+          <Icon containerStyle={{left:("40%"),marginTop:20}} size={60} color="white" name={this.state.face} type='ionicon' />
+        </View>
+      );
+    }
+  }
 
   render() {
   const {navigation} = this.props;
@@ -315,7 +313,7 @@ else{
     <View style={{backgroundColor:this.state.color,height:"100%"}}>
       <ImageBackground source={ require('../assets/images/coolcool.png') } style={{width: '100%', height: '97%'}} resizeMode='cover'>
         {this.body()}
-        {this.face(EventId)}
+        {this.faceButton(EventId)}
       </ImageBackground>
     </View>
   );
@@ -407,17 +405,17 @@ const styles = StyleSheet.create({
      justifyContent: 'center'
   },
   loader:{
-     backgroundColor: '#ccc',
-     flex: 1,
-     position: 'absolute',
-     width: 120,
-     justifyContent: 'center',
-     borderRadius:10,
+   backgroundColor: '#ccc',
+   flex: 1,
+   position: 'absolute',
+   width: 120,
+   justifyContent: 'center',
+   borderRadius:10,
   },
   DateAndTime:{
-    flex:1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin:10,
+  flex:1,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  margin:10,
   }
 });

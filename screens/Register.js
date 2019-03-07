@@ -85,7 +85,6 @@ TextInputs = () => {
 );
 }
 
-
 handleEmail = () => {
   this.setState({
     loading: true
@@ -153,11 +152,11 @@ Register = () =>
           const {navigate} = this.props.navigation;
           navigate("Main");
         }
-        this.setState({ loading: false});
-        }).catch((error) =>
+          this.setState({ loading: false});
+          }).catch((error) =>
         {
-        console.error(error);
-        this.setState({ loading: false });
+          console.error(error);
+          this.setState({ loading: false });
         });
     });
   }

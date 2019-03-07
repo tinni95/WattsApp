@@ -9,8 +9,7 @@ import {
   View,
   Button,
   TextInput,
-  Picker,
-  FormLabel, FormInput, FormValidationMessage
+  Picker
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Dropdown } from 'react-native-material-dropdown';
@@ -50,7 +49,7 @@ export default class HomeScreen extends React.Component {
         }).then((response) => response.json()).then((responseJson) => {
           alert(responseJson, "");
           this.setState({loading: false});
-          this.props.navigation.navigate("Links");
+          this.props.navigation.navigate("Links",{course:this.state.course});
         }).catch((error) => {
           console.error(error);
         });
@@ -62,7 +61,7 @@ export default class HomeScreen extends React.Component {
 
 
   ChangeFullName = () => {
-    if (this.state.name.length > 4 && this.state.surname.length> 4) {
+    if (this.state.name.length >= 2 && this.state.surname.length>= 2) {
       this.setState({
         loading: true
       }, () => {
@@ -79,7 +78,7 @@ export default class HomeScreen extends React.Component {
         }).then((response) => response.json()).then((responseJson) => {
           alert(responseJson, "");
           this.setState({loading: false});
-          this.props.navigation.navigate("Links");
+          this.props.navigation.navigate("Links",{FullName:this.state.name+" "+this.state.surname});
         }).catch((error) => {
           console.error(error);
         });
@@ -107,7 +106,7 @@ export default class HomeScreen extends React.Component {
         }).then((response) => response.json()).then((responseJson) => {
           alert(responseJson, "");
           this.setState({loading: false});
-          this.props.navigation.navigate("Links");
+          this.props.navigation.navigate("Links",{hall:this.state.hall});
         }).catch((error) => {
           console.error(error);
         });
@@ -128,8 +127,8 @@ export default class HomeScreen extends React.Component {
   ];
     return(
     <View>
-    <Dropdown containerStyle={styles.dropdown} textColor="white" itemColor="black" selectedItemColor="black" baseColor="white" label='Select Hall' data={data}
-    onChangeText = {(value) => this.setState({ hall: value })}/>
+      <Dropdown containerStyle={styles.dropdown} textColor="white" itemColor="black" selectedItemColor="black" baseColor="white" label='Select Hall' data={data}
+      onChangeText = {(value) => this.setState({ hall: value })}/>
     </View>
   );
   }
@@ -193,7 +192,6 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-
     <View style={styles.container}>
       <View style={styles.section}>
         {this.Picker()}

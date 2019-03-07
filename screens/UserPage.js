@@ -127,9 +127,17 @@ export default class LinksScreen extends React.Component {
     };
     };
 
-  componentDidMount() {
-    fass=false;
-    loading=false;
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.navigation.getParam("course","a") !== prevProps.navigation.getParam("course","a")||
+        this.props.navigation.getParam("FullName","b") !== prevProps.navigation.getParam("FullName","b"||
+        this.props.navigation.getParam("hall","c") !== prevProps.navigation.getParam("hall","c")))
+        {
+          this.fetchData();
+        }
+  }
+
+  fetchData = () =>{
     fetch('http://gladiator1924.com/a/UserPage.php',
     {
         method: 'POST',
@@ -155,6 +163,12 @@ export default class LinksScreen extends React.Component {
     {
         console.error(error);
     });
+  }
+
+  componentDidMount() {
+    fass=false;
+    loading=false;
+    this.fetchData();
   }
 
  renderImage = () =>{
