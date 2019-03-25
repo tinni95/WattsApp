@@ -131,7 +131,7 @@ renderEvents = () =>{
       <Image style={styles.Discover} source={ require('../assets/images/mamma.jpg') } />
       <View style={styles.Eventsheader}>
       <Text style={styles.Title}> {this.CalculateEntry(this.state.data["Title"],counter,i)}</Text>
-      <TouchableHighlight onPress={ ()=> navigate("EditEvent",{
+      <TouchableOpacity style={{width:size,height:size,position:"absolute",top:80,right:10}} onPress={ ()=> navigate("EditEvent",{
         Title:this.CalculateEntry(this.state.data["Title"],counter,i),
         Location:this.CalculateEntry(this.state.data["Location"],counter,i),
         Date:this.CalculateEntry(this.state.data["Date"],counter,i),
@@ -140,16 +140,16 @@ renderEvents = () =>{
         ID:this.CalculateEntry(this.state.data["EID"],counter,i),
         })
         }>
-      <Image style={{width:size,height:size,position:"absolute",top:10,right:10}} source={ require('../assets/images/ulisse.png') } />
-      </TouchableHighlight>
-      <TouchableHighlight onPress={ ()=> navigate("Notify",{
+      <Image style={{width:size,height:size}} source={ require('../assets/images/ulisse.png') } />
+      </TouchableOpacity>
+      <TouchableOpacity style={{width:size+5,height:size+5,position:"absolute",right:87.5,top:100}}  onPress={ ()=> navigate("Notify",{
         Title:this.CalculateEntry(this.state.data["Title"],counter,i),
         ID:this.CalculateEntry(this.state.data["EID"],counter,i),
         })
         }>
-      <Image style={{width:size+5,height:size+5,position:"absolute",right:87.5,top:30}} source={ require('../assets/images/Notification.png') } />
-      </TouchableHighlight>
-      <TouchableHighlight onPress={ ()=> navigate("EventPage",{
+      <Image style={{width:size+5,height:size+5}} source={ require('../assets/images/Notification.png') } />
+      </TouchableOpacity>
+      <TouchableOpacity style={{width:size+10,height:size+10,position:"absolute",right:175,top:120}} onPress={ ()=> navigate("EventPage",{
         Title:this.CalculateEntry(this.state.data["Title"],counter,i),
         Location:this.CalculateEntry(this.state.data["Location"],counter,i),
         Date:this.CalculateEntry(this.state.data["Date"],counter,i),
@@ -158,8 +158,8 @@ renderEvents = () =>{
         ID:this.CalculateEntry(this.state.data["EID"],counter,i),
         })
         }>
-      <Image style={{width:size+10,height:size+10,position:"absolute",right:175,top:50}} source={ require('../assets/images/file.png') } />
-      </TouchableHighlight>
+      <Image style={{width:size+10,height:size+10}} source={ require('../assets/images/file.png') } />
+      </TouchableOpacity>
       </View>
       <View style={styles.footer}>
         <Text style={styles.Location}>@

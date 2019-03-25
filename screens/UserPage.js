@@ -17,9 +17,9 @@ export default class LinksScreen extends React.Component {
 
   static navigationOptions = ({ navigation }) =>{
     return {
-      title: "User Profile",
+      title: "               User Profile",
       headerRight: ( <
-        Button onPress = {
+        Button containerStyle={{marginLeft:5}} onPress = {
           () => {
             if (!fass) {
               navigation.setParams({

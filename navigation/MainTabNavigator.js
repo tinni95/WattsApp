@@ -31,7 +31,7 @@ HomeStack.navigationOptions = {
       name={
         Platform.OS === 'ios'
           ? `ios-thumbs-up`
-          : 'md-ithumbs-up'
+          : 'md-thumbs-up'
       }
     />
   ),

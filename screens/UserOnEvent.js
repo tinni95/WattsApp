@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableHighlight,
   View,
   TextInput,
 } from 'react-native';
@@ -36,11 +37,11 @@ export default class UserCreed extends React.Component {
   componentDidMount() {
     if(PixelRatio.get()<=2){
       fontsize=30;
-      paddingtop=-35;
+
     }
     else{
       fontsize=40;
-      paddingtop=-40;
+
     }
     fetch('https://hwattsup.website/AppBackEnd/UserPage.php',
     {
@@ -85,16 +86,16 @@ export default class UserCreed extends React.Component {
   WattsAppBtn = () => {
     if(!this.state.loading){
       return(
-        <TouchableOpacity style={{height:50,marginTop:paddingtop}} onPress={()=>this.WattsApp()}>
+        <TouchableHighlight style={{height:50,position:"absolute",bottom:0,left:0,backgroundColor:"blue"}} onPress={()=>this.WattsApp()}>
         <Text style={{fontFamily:"noteworthy",fontSize:fontsize,color:"white",marginLeft:190,marginTop:-20}}>WattsApp</Text>
-        </TouchableOpacity>
+        </TouchableHighlight>
       );
       }
     else{
       return(
-        <View style={{height:50,marginTop:paddingtop}}>
+        <TouchableHighlight style={{height:100,marginTop:paddingtop}}>
         <Text style={{fontFamily:"noteworthy",fontSize:fontsize,color:"white",marginTop:-20,marginLeft:190}}>WattsApp</Text>
-        </View>
+        </TouchableHighlight>
       );
     }
     }
@@ -163,8 +164,9 @@ export default class UserCreed extends React.Component {
     <View style={{backgroundColor:"#ef4572",height:"100%"}}>
     <ImageBackground source={ require('../assets/images/Register.png') } style={{width: '100%', height: '97%'}} resizeMode='cover'>
     {this.body()}
+        {this.WattsAppBtn()}
     </ImageBackground>
-    {this.WattsAppBtn()}
+
     </View>
     );
   }

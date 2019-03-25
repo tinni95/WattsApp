@@ -206,7 +206,8 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-    <View style={styles.container}>
+
+    <ScrollView style={styles.container}>
       <View style={styles.section}>
         {this.Picker()}
         {this.HallButton()}
@@ -223,7 +224,7 @@ export default class HomeScreen extends React.Component {
           {this.FullNameButton()}
       </View>
 
-    </View>
+    </ScrollView>
     );
   }
 }

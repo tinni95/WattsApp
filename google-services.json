@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "63738810180",
+    "firebase_url": "https://wattsapp-c16ed.firebaseio.com",
+    "project_id": "wattsapp-c16ed",
+    "storage_bucket": "wattsapp-c16ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63738810180:android:ed02b6de29a943f9",
+        "android_client_info": {
+          "package_name": "diverse.heriotwattsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63738810180-llvlvfvkhib81dmote3ktafvoftv83hb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_J4fi5nNScNW53tdz6rIoIC80zYy7VtU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

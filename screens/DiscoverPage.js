@@ -163,7 +163,7 @@ for (let i = 0; i < this.state.data["Title"].length; i++) {
         <View style={styles.headerContainer}>
         <View style={{width:"80%"}}>
             <SearchBar
-            containerStyle={{backgroundColor:"white",border:"none"}}
+            containerStyle={{backgroundColor:"white"}}
             lightTheme="true"
             placeholder="Search title, date..."
             onChangeText={this.updateSearch}

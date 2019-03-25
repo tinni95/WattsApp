@@ -27,7 +27,8 @@
       "bundleIdentifier": "diverse.heriotwattsapp"
     },
     "android": {
-      "package": "diverse.heriotwattsapp"
+      "package": "diverse.heriotwattsapp",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }
