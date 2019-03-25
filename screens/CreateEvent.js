@@ -24,11 +24,13 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 class UselessTextInput extends React.Component {
   render() {
     return (
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
       <TextInput
         {...this.props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
         editable = {true}
         maxLength = {300}
       />
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -77,7 +79,7 @@ export default class LinksScreen extends React.Component {
   else {
       this.setState({ loading: true}, () =>
       {
-          fetch('http://gladiator1924.com/a/makeEvent.php',
+          fetch('https://hwattsup.website/AppBackEnd/makeEvent.php',
           {
               method: 'POST',
               headers:
@@ -137,7 +139,7 @@ export default class LinksScreen extends React.Component {
           <View>
             <View>
               <View>
-                <TextInput maxLength={15} placeholderTextColor="rgba(255,255,255,0.8)" placeholder="Event Title" style={styles.title} onChangeText={(text)=> this.setState({ title: text })}/>
+                <TextInput maxLength={25} placeholderTextColor="rgba(255,255,255,0.8)" placeholder="Event Title" style={styles.title} onChangeText={(text)=> this.setState({ title: text })}/>
               </View>
               <TouchableOpacity onPress={this._showTimePicker}>
                 <View style={{flexDirection:"row"}}>
@@ -222,7 +224,6 @@ bottom: {
     color: 'white',
     fontWeight: 'bold',
     height: hp("15%"),
-    marginTop: hp("5%"),
     fontSize: 15,
     margin: 5,
   },

@@ -31,12 +31,17 @@ export default class HomeScreen extends React.Component {
     }
   }
 
+  validateCourse = () => {
+    var re = /[a-z ]{1,50}/;
+    return re.test(this.state.course);
+  }
+
   ChangeCourse = () => {
-    if (this.state.course.length > 8) {
+    if (this.validateCourse()) {
       this.setState({
         loading: true
       }, () => {
-        fetch('http://gladiator1924.com/a/ChangeCourse.php', {
+        fetch('https://hwattsup.website/AppBackEnd/ChangeCourse.php', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -55,17 +60,25 @@ export default class HomeScreen extends React.Component {
         });
       });
     } else {
-      alert("the input is too short", "");
+      alert("Something wrong with the input", "");
     }
   }
 
+  validateName = () => {
+    var re = /[a-z]{1,10}/;
+    return re.test(this.state.name);
+  }
+  validateSurname = () => {
+    var re = /[a-z']{1,10}/;
+    return re.test(this.state.surname);
+  }
 
   ChangeFullName = () => {
-    if (this.state.name.length >= 2 && this.state.surname.length>= 2) {
+    if (this.validateName() && this.validateSurname()) {
       this.setState({
         loading: true
       }, () => {
-        fetch('http://gladiator1924.com/a/ChangeFullName.php', {
+        fetch('https://hwattsup.website/AppBackEnd/ChangeFullName.php', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -84,7 +97,7 @@ export default class HomeScreen extends React.Component {
         });
       });
     } else {
-      alert("the input is too short", "");
+      alert("Something wrong with the input", "");
     }
   }
 
@@ -92,7 +105,7 @@ export default class HomeScreen extends React.Component {
     this.setState({
       loading: true
     }, () => {
-        fetch('http://gladiator1924.com/a/ChangeHall.php', {
+        fetch('https://hwattsup.website/AppBackEnd/ChangeHall.php', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -115,6 +128,7 @@ export default class HomeScreen extends React.Component {
 
   Picker = () => {
     let data = [
+    {value: 'Off-Campus',},
     {value: 'Leonard Horner Hall',},
     {value: 'Lord Thompson Hall',},
     {value: 'Lord Home',},

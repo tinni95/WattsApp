@@ -16,6 +16,7 @@ import { Icon } from 'react-native-elements';
 import { MonoText } from '../components/StyledText';
 import moment from "moment";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { SearchBar } from 'react-native-elements';
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -25,18 +26,22 @@ export default class SettingsScreen extends React.Component {
   constructor()
   {
       super();
-      this.state = { loaded:false, refreshing: false, data:[],Usersdata:[]}
+      this.state = {  search: '', loaded:false, refreshing: false, data:[],Usersdata:[]}
   }
 
 componentDidMount(){
      this.PopEvents();
 }
 
+updateSearch = search => {
+  this.setState({ search });
+};
+
   _onRefresh = () => {
     this.setState({
       refreshing: true
     });
-    fetch('http://gladiator1924.com/a/events.php', {
+    fetch('https://hwattsup.website/AppBackEnd/events.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -67,7 +72,7 @@ componentDidMount(){
   }
 
   PopEvents = () => {
-  fetch('http://gladiator1924.com/a/events.php', {
+  fetch('https://hwattsup.website/AppBackEnd/events.php', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -92,7 +97,12 @@ componentDidMount(){
 renderEvents = () =>{
 const {navigate} = this.props.navigation;
 let events = [];
+var found= false;
 for (let i = 0; i < this.state.data["Title"].length; i++) {
+  var date=(this.state.data["Date"][i].substring(8,10))+"/"+(this.state.data["Date"][i].substring(5,7));
+  if(this.state.data["Title"][i].toLowerCase().includes(this.state.search.toLowerCase())||
+  date.includes(this.state.search.toLowerCase())){
+  found=true;
   events.push(<TouchableOpacity onPress = { () => navigate("EventPage",{
   Title:this.state.data["Title"][i],
   Location:this.state.data["Location"][i],
@@ -105,17 +115,19 @@ for (let i = 0; i < this.state.data["Title"].length; i++) {
   <View style={styles.DiscoverContainer}>
     <Image style={styles.DiscoverImage} source={ require('../assets/images/mamma.jpg')}/>
     <Image style={styles.UserImage} source={{uri:this.state.data["Image"][i]}}/>
+    <View>
     <Text style={styles.Title}> {this.state.data["Title"][i]}</Text>
-    <Text style={styles.Owner}> Hosted By: {this.state.data["FullName"][i]}</Text>
+    <Text style={styles.Owner}> {this.state.data["FullName"][i]}</Text>
+    </View>
     <View style={styles.footer}>
-      <Text style={styles.Location}>@{this.state.data["Location"][i].length>25 ? this.state.data["Location"][i].substring(0,25)+"..":this.state.data["Location"][i]}</Text>
+      <Text style={styles.Location}>@{this.state.data["Location"][i].length>40 ? this.state.data["Location"][i].substring(0,40)+"..":this.state.data["Location"][i]}</Text>
       <View style={{flexDirection: 'row',paddingLeft:10,paddingTop:15,justifyContent: 'space-between',}}>
         <View style={{flexDirection:"row"}}>
-          <Icon containerStyle={{marginRight:14,marginTop:-6}} size={35} color="#4a4b4c" name='ios-calendar' type='ionicon' />
-          <Text style={styles.Date}>{(this.state.data["Date"][i].substring(8,10))+"/"+(this.state.data["Date"][i].substring(5,7))}</Text>
+          <Icon containerStyle={{marginRight:14,marginTop:-6}} size={30} color="black" name='ios-calendar' type='ionicon' />
+          <Text style={styles.Date}>{date}</Text>
         </View>
         <View style={{flexDirection:"row"}}>
-          <Icon containerStyle={{marginTop:-6}} size={35} color="#4a4b4c" name='ios-clock' type='ionicon' />
+          <Icon containerStyle={{marginTop:-6}} size={30} color="black" name='ios-clock' type='ionicon' />
           <Text style={styles.Time}>{this.state.data["Time"][i].substring(0,5)}</Text>
         </View>
       </View>
@@ -123,13 +135,22 @@ for (let i = 0; i < this.state.data["Title"].length; i++) {
   </View>
 </TouchableOpacity>
 );
+}
+  }
+  if(!found){
+    events.push(
+    <View style={styles.tabBarInfoContainer}>
+      <Text style={styles.tabBarInfoText}>No events match your search query</Text>
+    </View>
+  );
   }
   return events
 }
 
   render() {
   const {navigate} = this.props.navigation;
-if (!this.state.loaded) {
+  const { search } = this.state.search;
+  if (!this.state.loaded) {
   return(
     <View style={{alignItems:"center",flex: 1,justifyContent: 'center'}}>
       <Image style={styles.loading} source={ require('../assets/images/giffy.gif') } />
@@ -139,20 +160,27 @@ if (!this.state.loaded) {
     <View style={styles.container}>
       <ScrollView refreshControl={ <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh} />}
       style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View>
+        <View style={styles.headerContainer}>
+        <View style={{width:"80%"}}>
+            <SearchBar
+            containerStyle={{backgroundColor:"white",border:"none"}}
+            lightTheme="true"
+            placeholder="Search title, date..."
+            onChangeText={this.updateSearch}
+            value={search}
+          />
+          </View>
           <TouchableOpacity style={styles.add} onPress={()=> navigate("AddEvent")} >
           <Text style={styles.addtext}>+</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.headerContainer}>
-          <Text style={styles.Discover}>Discover</Text>
-        </View>
         {this.renderEvents()}
       </ScrollView>
     </View>
-          );
+    );
   }
 }
+
 const styles = StyleSheet.create({
 UserImage:{
   width:100,
@@ -164,16 +192,16 @@ UserImage:{
 },
 addtext:{
   color:'white',
-  fontSize:20,
+  fontSize:22,
 },
 DiscoverImage:{
- backgroundColor: '#ccc',
- flex: 1,
- position: 'absolute',
- width: '100%',
- height: '100%',
- justifyContent: 'center',
- borderRadius:10,
+  backgroundColor: '#ccc',
+  flex: 1,
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  justifyContent: 'center',
+  borderRadius:10,
  },
 add:{
   alignItems:'center',
@@ -196,13 +224,19 @@ contentContainer: {
   paddingTop: 30,
 },
 headerContainer: {
-  margin:15,
-  width:wp("50%"),
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  margin:5,
+  paddingTop:22.5,
 },
 navigationFilename: {
   marginTop: 20,
 },
 DiscoverContainer: {
+  flex:1,
+  flexDirection: 'column',
+  justifyContent: 'space-between',
   margin:10,
   height:330,
   borderRadius:10,
@@ -230,29 +264,30 @@ Owner: {
   color:'white',
 },
 Location: {
-  fontSize:22,
+  fontSize:18,
   marginLeft:10,
   marginBottom:5,
-  color:'#4a4b4c',
+  color:'black',
   fontWeight:'bold',
 },
 Time: {
-  fontSize:22,
-  color:'#4a4b4c',
+  fontSize:18,
+  color:'black',
   marginLeft:15,
   marginRight:10,
   marginBottom:5,
   fontWeight:'bold',
 },
 Date:{
-  fontSize:22,
-  color:'#4a4b4c',
+  fontSize:18,
+  color:'black',
   fontWeight:'bold',
 },
 footer:{
   ...Platform.select({
     ios: {
-    marginTop:155,
+    justifyContent:"flex-end",
+    marginBottom:10
     },
     android: {
     marginTop:145,
@@ -266,5 +301,30 @@ loading:{
   width: 120,
   justifyContent: 'center',
   borderRadius:10,
-}
+},
+tabBarInfoContainer: {
+  position: 'absolute',
+  top: 120,
+  left: 0,
+  right: 0,
+  ...Platform.select({
+    ios: {
+     shadowColor: 'black',
+     shadowOffset: { height: -3 },
+     shadowOpacity: 0.1,
+     shadowRadius: 3,
+    },
+    android: {
+     elevation: 20,
+    },
+  }),
+  alignItems: 'center',
+  backgroundColor: '#fbfbfb',
+  paddingVertical: 20,
+},
+tabBarInfoText: {
+  fontSize: 17,
+  color: 'rgba(96,100,109, 1)',
+  textAlign: 'center',
+},
 });

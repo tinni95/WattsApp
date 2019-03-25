@@ -23,7 +23,7 @@ deleteAccount = () => {
     [{
         text: 'Yes',
         onPress: () => {
-          fetch('http://gladiator1924.com/a/RemoveAccount.php', {
+          fetch('https://hwattsup.website/AppBackEnd/RemoveAccount.php', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',

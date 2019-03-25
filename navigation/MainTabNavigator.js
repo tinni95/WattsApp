@@ -14,21 +14,24 @@ import EditEvent from '../screens/EditEvent';
 import More from '../screens/More';
 import ChangePassword from '../screens/ChangePassword';
 import ChangeDetails from '../screens/ChangeDetails';
+import Notify from '../screens/Notify';
+
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   EventPage: EventPage,
+  UserOnEvent : UserOnEvent
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Joined',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-thumbs-up`
+          : 'md-ithumbs-up'
       }
     />
   ),
@@ -40,9 +43,11 @@ const LinksStack = createStackNavigator({
   UserEvents : UserEvents,
   EditEvent : EditEvent,
   More : More,
+  EventPage: EventPage,
   ChangeDetails:ChangeDetails,
-  ChangePassword:ChangePassword
-
+  ChangePassword:ChangePassword,
+  Notify:Notify,
+  UserOnEvent : UserOnEvent
 });
 
 LinksStack.navigationOptions = {

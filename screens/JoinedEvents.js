@@ -32,10 +32,9 @@ componentDidMount(){
      this.PopEvents();
 }
 
-
 _onRefresh = () => {
   this.setState({refreshing: true});
-  fetch('http://gladiator1924.com/a/JoinedEvents.php',
+  fetch('https://hwattsup.website/AppBackEnd/JoinedEvents.php',
   {
     method: 'POST',
     headers:
@@ -69,7 +68,7 @@ refreshEvents = () =>
 
 PopEvents = () =>
 {
-  fetch('http://gladiator1924.com/a/JoinedEvents.php', {
+  fetch('https://hwattsup.website/AppBackEnd/JoinedEvents.php', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -120,8 +119,10 @@ renderEvents = () =>{
 <View style={styles.DiscoverContainer}>
   <Image style={styles.DiscoverImage} source={ require('../assets/images/mamma.jpg') } />
   <Image style={styles.UserImage} source={{uri:this.CalculateEntry(this.state.data["Image"],counter,i)}} />
+  <View>
   <Text style={styles.Title}> {this.CalculateEntry(this.state.data["Title"],counter,i)}</Text>
   <Text style={styles.Owner}> Hosted By: {this.CalculateEntry(this.state.data["FullName"],counter,i)}</Text>
+  </View>
   <View style={styles.footer}>
     <Text style={styles.Location}>@
     {
@@ -159,43 +160,42 @@ return(
 );
 }
 else if(!this.state.data["Title"]){
-return (
-<View style={styles.container}>
-<ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}
-style={styles.container} contentContainerStyle={styles.contentContainer}>
-    <View style={styles.welcomeContainer}>
-      <Image source={require('../assets/images/heriot-watt-opac.png')} style={styles.welcomeImage}/>
+  return (
+  <View style={styles.container}>
+  <ScrollView refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh}/>}
+  style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <View style={styles.welcomeContainer}>
+        <Image source={require('../assets/images/heriot-watt-opac.png')} style={styles.welcomeImage}/>
+      </View>
+      <View style={styles.getStartedContainer}>
+        <Text style={styles.getStartedText}>The events you join will appear on this page</Text>
+      </View>
+      <View style={styles.helpContainer}>
+      </View>
+    </ScrollView>
+    <View style={styles.tabBarInfoContainer}>
+      <Text style={styles.tabBarInfoText}>Go to Discover to find and join new events</Text>
     </View>
-    <View style={styles.getStartedContainer}>
-      <Text style={styles.getStartedText}>The events you join will appear on this page</Text>
-    </View>
-    <View style={styles.helpContainer}>
-    </View>
-  </ScrollView>
-  <View style={styles.tabBarInfoContainer}>
-    <Text style={styles.tabBarInfoText}>Go to Discover to find and join new events</Text>
   </View>
-</View>
-);
-}
-else{
-return (
-<View style={styles.container}>
- <ScrollView refreshControl={
-      <RefreshControl
-        refreshing={this.state.refreshing}
-        onRefresh={this._onRefresh}
-      />
-    }
-      style={styles.container} contentContainerStyle={styles.contentContainer}>
-     <View style={styles.headerContainer}>
-     <Text style={styles.header}>Coming Up For You..</Text>
-     </View>
-    {this.renderEvents()}
- </ScrollView>
-</View>
   );
 }
+else
+  {
+  return (
+  <View style={styles.container}>
+   <ScrollView refreshControl={
+        <RefreshControl
+          refreshing={this.state.refreshing}
+          onRefresh={this._onRefresh}
+        />
+      }
+        style={styles.container} contentContainerStyle={styles.contentContainer}>
+
+      {this.renderEvents()}
+   </ScrollView>
+  </View>
+    );
+  }
 }
 }
 const styles = StyleSheet.create({
@@ -227,11 +227,15 @@ headerContainer: {
   margin:15,
 },
 DiscoverContainer: {
+  flex:1,
+  flexDirection: 'column',
+  justifyContent: 'space-between',
   margin:10,
-  height:330,
+  height:300,
   borderRadius:10,
   borderWidth: 0.1,
   borderColor: 'gray',
+  backgroundColor:'blue',
 },
 header: {
   fontSize:32,
@@ -250,14 +254,14 @@ Owner: {
   color:'white',
 },
 Location: {
-  fontSize:22,
+  fontSize:18,
   marginLeft:10,
   marginBottom:5,
   color:'black',
   fontWeight:'bold',
 },
 Time: {
-  fontSize:22,
+  fontSize:18,
   color:'black',
   marginLeft:15,
   marginRight:10,
@@ -265,19 +269,13 @@ Time: {
   fontWeight:'bold',
 },
 Date:{
-  fontSize:22,
+  fontSize:18,
   color:'black',
   fontWeight:'bold',
 },
 footer:{
-  ...Platform.select({
-    ios: {
-    marginTop:155,
-    },
-    android: {
-    marginTop:145,
-    },
-  }),
+  justifyContent:"flex-end",
+  marginBottom:10
 },
 container: {
   flex: 1,

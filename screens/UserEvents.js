@@ -10,13 +10,14 @@ import {
   TouchableHighlight,
   View,
   TextInput,
-  RefreshControl
+  RefreshControl,
+  PixelRatio
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { MonoText } from '../components/StyledText';
 import moment from "moment";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+var size;
 export default class SettingsScreen extends React.Component {
 
   constructor()
@@ -26,6 +27,12 @@ export default class SettingsScreen extends React.Component {
   }
 
 componentDidMount(){
+  if(PixelRatio.get()<=2){
+    size=60;
+  }
+  else{
+    size=80
+  }
      this.PopEvents();
 }
 
@@ -33,7 +40,7 @@ componentDidMount(){
     this.setState({
       refreshing: true
     });
-    fetch('http://gladiator1924.com/a/UserEvents.php', {
+    fetch('https://hwattsup.website/AppBackEnd/UserEvents.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -64,36 +71,37 @@ componentDidMount(){
      this.PopEvents();
      this.renderEvents();
   }
-PopEvents = () => {
-  fetch('http://gladiator1924.com/a/UserEvents.php', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      id: global.userid
-    })
 
-  }).then((response) => response.json()).then((responseJson) => {
-    if (responseJson == "EMPTY") {
-      this.setState({
-        loaded: true,
-        data: responseJson,
-        empty: true
-      });
-    } else {
-      this.setState({
-        loaded: true,
-        data: responseJson,
-        empty: false
-      });
-    }
-  }).catch((error) => {
-    console.error(error);
-  });
+  PopEvents = () => {
+    fetch('http://gladiator1924.com/a/UserEvents.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: global.userid
+      })
 
-}
+    }).then((response) => response.json()).then((responseJson) => {
+      if (responseJson == "EMPTY") {
+        this.setState({
+          loaded: true,
+          data: responseJson,
+          empty: true
+        });
+      } else {
+        this.setState({
+          loaded: true,
+          data: responseJson,
+          empty: false
+        });
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  }
 
   CalculateEntry = (entry,counter,i) =>
   {
@@ -118,19 +126,41 @@ renderEvents = () =>{
   }
   for (let i = 0; i < counter; i++) {
     events.push(
-  <TouchableOpacity onPress={ ()=> navigate("EditEvent",{
-    Title:this.CalculateEntry(this.state.data["Title"],counter,i),
-    Location:this.CalculateEntry(this.state.data["Location"],counter,i),
-    Date:this.CalculateEntry(this.state.data["Date"],counter,i),
-    Time:this.CalculateEntry(this.state.data["Time"],counter,i),
-    Description:this.CalculateEntry(this.state.data["Description"],counter,i),
-    ID:this.CalculateEntry(this.state.data["EID"],counter,i),
-    })
-    }>
+
     <View style={styles.DiscoverContainer}>
       <Image style={styles.Discover} source={ require('../assets/images/mamma.jpg') } />
-      <Image style={styles.image} source={ require('../assets/images/ulisse.png') } />
+      <View style={styles.Eventsheader}>
       <Text style={styles.Title}> {this.CalculateEntry(this.state.data["Title"],counter,i)}</Text>
+      <TouchableHighlight onPress={ ()=> navigate("EditEvent",{
+        Title:this.CalculateEntry(this.state.data["Title"],counter,i),
+        Location:this.CalculateEntry(this.state.data["Location"],counter,i),
+        Date:this.CalculateEntry(this.state.data["Date"],counter,i),
+        Time:this.CalculateEntry(this.state.data["Time"],counter,i),
+        Description:this.CalculateEntry(this.state.data["Description"],counter,i),
+        ID:this.CalculateEntry(this.state.data["EID"],counter,i),
+        })
+        }>
+      <Image style={{width:size,height:size,position:"absolute",top:10,right:10}} source={ require('../assets/images/ulisse.png') } />
+      </TouchableHighlight>
+      <TouchableHighlight onPress={ ()=> navigate("Notify",{
+        Title:this.CalculateEntry(this.state.data["Title"],counter,i),
+        ID:this.CalculateEntry(this.state.data["EID"],counter,i),
+        })
+        }>
+      <Image style={{width:size+5,height:size+5,position:"absolute",right:87.5,top:30}} source={ require('../assets/images/Notification.png') } />
+      </TouchableHighlight>
+      <TouchableHighlight onPress={ ()=> navigate("EventPage",{
+        Title:this.CalculateEntry(this.state.data["Title"],counter,i),
+        Location:this.CalculateEntry(this.state.data["Location"],counter,i),
+        Date:this.CalculateEntry(this.state.data["Date"],counter,i),
+        Time:this.CalculateEntry(this.state.data["Time"],counter,i),
+        Description:this.CalculateEntry(this.state.data["Description"],counter,i),
+        ID:this.CalculateEntry(this.state.data["EID"],counter,i),
+        })
+        }>
+      <Image style={{width:size+10,height:size+10,position:"absolute",right:175,top:50}} source={ require('../assets/images/file.png') } />
+      </TouchableHighlight>
+      </View>
       <View style={styles.footer}>
         <Text style={styles.Location}>@
         {
@@ -151,7 +181,7 @@ renderEvents = () =>{
         </View>
       </View>
     </View>
-  </TouchableOpacity>
+
     );
   }
   return events
@@ -226,11 +256,17 @@ container: {
 headerContainer: {
   margin:15,
 },
+Eventsheader: {
+    justifyContent:"flex-start",
+},
 DiscoverContainer: {
+  flex:1,
+  flexDirection: 'column',
+  justifyContent: 'space-between',
   margin:10,
   height:320,
   borderRadius:10,
-  borderWidth: 0.3,
+  borderWidth: 0.1,
   borderColor: 'gray',
 },
 header: {
@@ -266,20 +302,14 @@ Date:{
 footer:{
   ...Platform.select({
     ios: {
-    marginTop:165,
+      justifyContent:"flex-end",
+      marginBottom:10
+
     },
     android: {
     marginTop:160,
     },
   }),
-},
-image:{
-  width:80,
-  height:80,
-  position:"absolute",
-  right:10,
-  borderRadius:50,
-  top:95,
 },
 getStartedText: {
   fontSize: 22,

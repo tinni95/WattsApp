@@ -13,7 +13,8 @@ View,
 TextInput,
 Animated,
 RefreshControl,
-Easing
+Easing,
+KeyboardAvoidingView
 } from 'react-native';
 import moment from "moment";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -23,17 +24,19 @@ import { MonoText } from '../components/StyledText';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 class UselessTextInput extends React.Component {
-
   render() {
     return (
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
       <TextInput
         {...this.props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
         editable = {true}
         maxLength = {300}
       />
+      </KeyboardAvoidingView>
     );
   }
 }
+
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = ({
@@ -50,7 +53,7 @@ export default class LinksScreen extends React.Component {
                     text: 'Yes',
                     onPress: () => {
                       console.log(navigation.getParam('ID', 'NO-ID'));
-                      fetch('http://gladiator1924.com/a/RemoveEvent.php', {
+                      fetch('https://hwattsup.website/AppBackEnd/RemoveEvent.php', {
                         method: 'POST',
                         headers: {
                           'Accept': 'application/json',
@@ -128,7 +131,7 @@ export default class LinksScreen extends React.Component {
       this.setState({
         loading: true
       }, () => {
-        fetch('http://gladiator1924.com/a/EditEvent.php', {
+        fetch('https://hwattsup.website/AppBackEnd/EditEvent.php', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -222,6 +225,7 @@ return (
   </ImageBackground>
 </View>
 );
+
 }
 }
 const styles = StyleSheet.create({

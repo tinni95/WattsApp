@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "WattsApp",
-    "slug": "WattsApp",
+    "name": "Heriot-Wattsapp",
+    "slug": "Heriot-Wattsapp",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -14,7 +14,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1864ab"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "diverse.heriotwattsapp"
+    },
+    "android": {
+      "package": "diverse.heriotwattsapp"
     }
   }
 }

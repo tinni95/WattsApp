@@ -66,7 +66,7 @@ export default class HomeScreen extends React.Component {
             onPress: () => {
               this.setState({ loading: true}, () =>
               {
-              fetch('http://gladiator1924.com/a/NewPass.php', {
+              fetch('https://hwattsup.website/AppBackEnd/NewPass.php', {
                 method: 'POST',
                 headers: {
                   'Accept': 'application/json',

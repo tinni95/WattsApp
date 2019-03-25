@@ -25,12 +25,20 @@ export default class HomeScreen extends React.Component {
       this.state = {  password: '',passwordCheck: '',loading:false }
   }
 
+  validatePassword = () => {
+    if(this.state.password==this.state.passwordCheck){
+    var re = /(?=.*[0-9])/;
+    return re.test(this.state.password);
+    }
+    else {return false}
+  }
+
 ChangePassword = () => {
-  if (this.state.password === this.state.passwordCheck && this.state.passwordCheck.length > 5) {
+  if (this.validatePassword()) {
     this.setState({
       loading: true
     }, () => {
-      fetch('http://gladiator1924.com/a/ChangePassword.php', {
+      fetch('https://hwattsup.website/AppBackEnd/ChangePassword.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -50,7 +58,7 @@ ChangePassword = () => {
       });
     });
   } else {
-    alert("the passwords do not match or your password is too short", "");
+    alert("Not a valid password, valid password need at least 1 numeric character\n also check the passwords match");
   }
 }
 

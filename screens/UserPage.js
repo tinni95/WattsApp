@@ -1,13 +1,13 @@
 import React from 'react';
 import { ExpoLinksView } from '@expo/samples';
 import { ImagePicker ,Permissions} from 'expo';
-import { TextInput,View, Button,Image,ScrollView, StyleSheet , Platform, TouchableOpacity, Text} from 'react-native';
+import { Alert,Linking,TextInput,View, Button,Image,ScrollView, StyleSheet , Platform, TouchableOpacity, Text,AsyncStorage} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Icon } from 'react-native-elements';
 
 export default class LinksScreen extends React.Component {
   state = {
-    image: "http://gladiator1924.com/a/images/placeholder.jpeg",
+    image: "http://hwattsup.website/AppBackEnd/images/placeholder.jpeg",
     data: [],
     FullName: '',
     Hall : '',
@@ -39,7 +39,7 @@ export default class LinksScreen extends React.Component {
                   type: 'image/jpeg',
                   name: navigation.getParam('email', 'Edit') + ".jpeg",
                 });
-                fetch("http://gladiator1924.com/a/upload2.php", {
+                fetch("https://hwattsup.website/AppBackEnd/upload2.php", {
                   method: 'post',
                   body: data,
                   headers: {
@@ -50,11 +50,11 @@ export default class LinksScreen extends React.Component {
                   if (responseJson == "No") {
                     alert("error uploading file", "a");
                   } else {
-                    fetch("http://gladiator1924.com/a/write.php", {
+                    fetch("https://hwattsup.website/AppBackEnd/write.php", {
                       method: 'post',
                       body: JSON.stringify({
                         Userid: global.userid,
-                        image: "http://gladiator1924.com/a/images/" + responseJson,
+                        image: "http://hwattsup.website/AppBackEnd/images/" + responseJson,
                       }),
                       headers: {
                         Accept: 'application/json',
@@ -65,7 +65,10 @@ export default class LinksScreen extends React.Component {
                         loading: false
                       });
                       if (responseJson == "yea") {
-                        alert("Image Updated Successfully", "a");
+                        alert("Image updated successfully", "a");
+                        navigation.setParams({
+                          image: "Edit"
+                        });
                       } else {
                         alert("Oops", "a");
                       }
@@ -113,7 +116,9 @@ export default class LinksScreen extends React.Component {
                 otherParam: 'Edit'
               });
             } else {
-              navigation.navigate("Login");
+              console.log("camon");
+              AsyncStorage.removeItem('userid');
+              navigation.navigate("Main");
             }
             fass = !fass;
           }
@@ -213,13 +218,22 @@ if (fass){
 }
 
 _pickImage = async () => {
-  await Permissions.askAsync(Permissions.CAMERA);
-  await Permissions.askAsync(Permissions.CAMERA_ROLL);
+  const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+  if(status!=="granted"){
+    Alert.alert(
+   'Missing camera roll permissions',
+   'Permissions can be edited in Settings',
+   [
+    {text: 'Go to Settings', onPress: () =>  Linking.openURL('app-settings:')},
+    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+   ],
+   { cancelable: true }
+   )
+  }
  let result = await ImagePicker.launchImageLibraryAsync({
    allowsEditing: true,
    aspect: [4, 3],
  });
- console.log(result);
  if (!result.cancelled) {
    this.setState({ image: result.uri });
    this.props.navigation.setParams({image: result.uri });

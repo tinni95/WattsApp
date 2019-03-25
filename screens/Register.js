@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
   Picker,
+  KeyboardAvoidingView,
   TextInput,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
@@ -48,6 +49,7 @@ onSubmitEditing(value1) {
 
 Picker = () =>{
   let data = [
+  {value: 'Off-Campus',},
   {value: 'Leonard Horner Hall',},
   {value: 'Lord Thompson Hall',},
   {value: 'Lord Home',},
@@ -69,6 +71,7 @@ Picker = () =>{
 TextInputs = () => {
   return(
   <View>
+  <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
     <TextInput placeholderTextColor="rgba(255,255,255,0.8)" placeholder="Insert hw.ac.uk e-mail"
     style={styles.placeholder} onChangeText = {(text) => this.setState({ email: text })}/>
     <TextInput secureTextEntry={true} placeholderTextColor="rgba(255,255,255,0.8)" placeholder="Insert Password"
@@ -81,6 +84,8 @@ TextInputs = () => {
     style={styles.placeholder} onChangeText = {(text) => this.setState({ surname: text })}/>
     <TextInput placeholderTextColor="rgba(255,255,255,0.8)" placeholder="Insert Course Name"
     style={styles.placeholder} onChangeText = {(text) => this.setState({ course: text })}/>
+    {this.Picker()}
+  </KeyboardAvoidingView>
   </View>
 );
 }
@@ -111,10 +116,57 @@ handleEmail = () => {
   });
 }
 
+validateEmail = () => {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(this.state.email);
+}
+validateName = () => {
+  var re = /[a-z]{1,10}/;
+  return re.test(this.state.name);
+}
+validateSurname = () => {
+  var re = /[a-z']{1,10}/;
+  return re.test(this.state.surname);
+}
+validateCourse = () => {
+  var re = /[a-z ]{1,50}/;
+  return re.test(this.state.course);
+}
+validatePassword = () => {
+  if(this.state.password==this.state.passwordCheck){
+  var re = /(?=.*[0-9])/;
+  return re.test(this.state.password);
+  }
+  else {return false}
+}
+
+validateInputs = () => {
+  if(!this.validateEmail()){
+    alert("Not a valid e-mail");
+    return false;
+  }
+  else if(!this.validatePassword()){
+     alert("Not a valid password, valid password need at least 1 numeric character\n also check the passwords match");
+     return false;
+  }
+  else if(!this.validateName()){
+     alert("Not a valid name");
+     return false;
+  }
+  else if(!this.validateSurname()){
+     alert("Not a valid surname");
+     return false;
+  }
+  else if(!this.validateCourse()){
+     alert("Not a valid course name");
+     return false;
+  }
+  else return true
+}
+
 Register = () =>
 {
-  if(this.state.name.length>5&&this.state.surname.length&&this.state.course.length>5&&
-  this.state.password.length>5&&this.state.hall.length>5&&this.state.password===this.state.passwordCheck)
+  if(this.validateInputs())
   {
     this.setState({ loading: true}, () =>
     {
@@ -160,9 +212,6 @@ Register = () =>
         });
     });
   }
-  else{
-    alert("Make sure you insert acceptable inputs")
-  }
 }
 
 confirmButton= () => {
@@ -192,7 +241,6 @@ return (
    <View>
       <View style={{marginTop:15}}>
         {this.TextInputs()}
-        {this.Picker()}
       </View>
    </View>
   </ScrollView>
@@ -252,7 +300,7 @@ helpLinkText: {
 },
 arrow:{
  left:("35%"),
- marginBottom:30
+ marginBottom:25
 },
 placeholder:{
   borderBottomWidth:1,

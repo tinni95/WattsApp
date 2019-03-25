@@ -11,15 +11,17 @@ TouchableOpacity,
 View,
 TextInput,
 RefreshControl,
-Easing
+Easing,
+PixelRatio
 } from 'react-native';
 import moment from "moment";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { ListItem, Icon } from 'react-native-elements';
 import { Permissions, Calendar } from 'expo';
 import { MonoText } from '../components/StyledText';
-
-
+var iconsmargin;
+var timeMargin;
+var iconsize;
 export default class LinksScreen extends React.Component {
 
 constructor()
@@ -38,10 +40,22 @@ this.state =
  };
 }
 
+componentDidMount(){
+  if(PixelRatio.get()<=2){
+    iconsize=50;
+    iconsmargin=30;
+    timeMargin=100;
+  }
+  else{
+    iconsize=60;
+    iconsmargin=20;
+    timeMargin=150;
+  }
+}
 _onRefresh = (eventid) =>
 {
 this.setState({refreshing: true});
-fetch('http://gladiator1924.com/a/Users.php',
+fetch('https://hwattsup.website/AppBackEnd/Users.php',
 {
     method: 'POST',
     headers:
@@ -63,7 +77,7 @@ fetch('http://gladiator1924.com/a/Users.php',
 }
 
 PopUsers = (eventid) => {
-  fetch('http://gladiator1924.com/a/Users.php', {
+  fetch('https://hwattsup.website/AppBackEnd/Users.php', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -93,6 +107,25 @@ else if(this.state.data["FullName"][0].length==1){
 }
 else {
   return this.state.data["FullName"].length;}
+}
+
+sendNotification = (To,Title) =>
+{
+let response = fetch('https://exp.host/--/api/v2/push/send',{
+  method: 'POST',
+  headers :
+ {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(
+  {
+   to : To,
+   sound : "default",
+   title : "Event Notification",
+   body: "Someone joined your event "+Title
+  })
+});
 }
 
 PopFace = (eventid) =>
@@ -128,67 +161,70 @@ fetch('http://gladiator1924.com/a/isJoined.php',
 });
 }
 
-faceSwap = (EventId) => {
-this.setState({
-loading: true
-});
-if (this.state.face == "ios-sad") {
-fetch('http://gladiator1924.com/a/JoinEvent.php', {
-method: 'POST',
-headers: {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-},
-body: JSON.stringify({
-  Userid: global.userid,
-  Eventid: EventId,
-})
-}).then((response) => response.json()).then((responseJson) => {
-if (responseJson === "YES") {
+faceSwap = (EventId,Title) => {
   this.setState({
-    face: "ios-happy"
+  loading: true
   });
-  this.setState({
-    color: "#72ffba"
+  if (this.state.face == "ios-sad") {
+  fetch('https://hwattsup.website/AppBackEnd/JoinEvent.php', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    Userid: global.userid,
+    Eventid: EventId,
+  })
+  }).then((response) => response.json()).then((responseJson) => {
+  if (responseJson != "NO") {
+    this.setState({
+      face: "ios-happy"
+    });
+    this.setState({
+      color: "#72ffba"
+    });
+    this.setState({
+      loading: false
+    });
+    alert("event joined", "");
+    if(responseJson != "YES"){
+      this.sendNotification(responseJson,Title);
+    }
+  }
+  }).catch((error) => {
+    console.error(error);
   });
-  this.setState({
-    loading: false
-  });
-  alert("event joined", "");
-}
-}).catch((error) => {
-  console.error(error);
-});
-}
-else {
-fetch('http://gladiator1924.com/a/UnjoinEvent.php', {
-method: 'POST',
-headers: {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-},
-body: JSON.stringify({
-  Userid: global.userid,
-  Eventid: EventId,
-})
+  }
+  else {
+  fetch('https://hwattsup.website/AppBackEnd/UnjoinEvent.php', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    Userid: global.userid,
+    Eventid: EventId,
+  })
 
-}).then((response) => response.json()).then((responseJson) => {
-if (responseJson === "NO") {
-  this.setState({
-    face: "ios-sad"
+  }).then((response) => response.json()).then((responseJson) => {
+  if (responseJson === "NO") {
+    this.setState({
+      face: "ios-sad"
+    });
+    this.setState({
+      color: "#4b4f4d"
+    });
+    this.setState({
+      loading: false
+    });
+    alert("Event left", "");
+  }
+  }).catch((error) => {
+  console.error(error);
   });
-  this.setState({
-    color: "#4b4f4d"
-  });
-  this.setState({
-    loading: false
-  });
-  alert("Event left", "");
-}
-}).catch((error) => {
-console.error(error);
-});
-}
+  }
 }
 
 DateAndTime= (Time,Date) => {
@@ -198,9 +234,14 @@ DateAndTime= (Time,Date) => {
         <Icon containerStyle={{marginRight:wp("2%")}} size={35} color="#4a4b4c" name='ios-calendar' type='ionicon' />
         <Text style={styles.Date}>{moment(Date).format("DD/MM")}</Text>
       </View>
-      <View style={{flexDirection: 'row'}}>
-        <Icon containerStyle={{marginLeft:wp("40%")}} size={35} color="#4a4b4c" name='ios-clock' type='ionicon' />
-        <Text style={styles.Time}>{Time}</Text>
+      <View style={{flexDirection: 'row', marginLeft:timeMargin}}>
+        <Icon containerStyle={{justifyContent:"flex-end",marginRight:wp("2%")}} size={35} color="#4a4b4c" name='ios-clock' type='ionicon' />
+        <Text style={ {
+          color: "#4a4b4c",
+          fontSize: 22,
+          fontWeight: 'bold',
+          marginTop: wp("1.5%"),
+        }}>{Time}</Text>
       </View>
     </View>
   );
@@ -213,7 +254,7 @@ attending= ()=>{
   <ScrollView style={styles.Attending} >
   {
     list.map((l, i) => (
-    <TouchableOpacity onPress={()=>navigate("UserOnEvent",{ID:this.state.data["ID"][i]})}>
+    <TouchableOpacity onPress={()=>navigate("UserOnEvent",{ID: this.usersNumber()>1 ? this.state.data["ID"][i] : this.state.data["ID"]})}>
       <ListItem titleStyle={{color:"#4a4b4c"}} subtitleStyle={{color:"#4a4b4c"}} containerStyle={{ borderBottomColor: '#4a4b4c' }} chevronColor="#4a4b4c" key={i} avatar={<Image source={{uri:l.avatar_url}}
         style={{width:50,height:50,borderRadius:25}} />}
       title={l.name}
@@ -264,7 +305,8 @@ renderUsers = () => {
       name: this.state.data["FullName"],
       avatar_url: this.state.data["Image"],
       subtitle: this.state.data["Course"],
-      id: this.state.data["id"],
+      id: this.state.data["ID"],
+
     })
   } else {
     for (let i = 0; i < this.state.data["FullName"].length; i++) {
@@ -272,25 +314,25 @@ renderUsers = () => {
         name: this.state.data["FullName"][i],
         avatar_url: this.state.data["Image"][i],
         subtitle: this.state.data["Course"][i],
-        id: this.state.data["id"],
+        id: this.state.data["ID"],
       })
     }
   }
   return list
 }
 
-faceButton = (EventId) => {
+faceButton = (EventId,Title) => {
   if(!this.state.loading){
     return(
-      <TouchableOpacity style={{height:85}} onPress={()=> this.faceSwap(EventId)} >
-        <Icon containerStyle={{left:("40%"),marginTop:20}} size={60} color="white" name={this.state.face} type='ionicon' />
+      <TouchableOpacity style={{height:85}} onPress={()=> this.faceSwap(EventId,Title)} >
+        <Icon containerStyle={{left:("40%"),marginTop:iconsmargin}} size={iconsize} color="white" name={this.state.face} type='ionicon' />
       </TouchableOpacity>
     );
     }
   else{
       return(
         <View style={{height:85}}>
-          <Icon containerStyle={{left:("40%"),marginTop:20}} size={60} color="white" name={this.state.face} type='ionicon' />
+          <Icon containerStyle={{left:("40%"),marginTop:iconsmargin}} size={iconsize} color="white" name={this.state.face} type='ionicon' />
         </View>
       );
     }
@@ -311,9 +353,9 @@ faceButton = (EventId) => {
   }
   return (
     <View style={{backgroundColor:this.state.color,height:"100%"}}>
-      <ImageBackground source={ require('../assets/images/coolcool.png') } style={{width: '100%', height: '97%'}} resizeMode='cover'>
+      <ImageBackground source={ require('../assets/images/coolcool2.png') } style={{width: '100%', height: '97%'}} resizeMode='cover'>
         {this.body()}
-        {this.faceButton(EventId)}
+        {this.faceButton(EventId,Title)}
       </ImageBackground>
     </View>
   );
@@ -340,7 +382,7 @@ const styles = StyleSheet.create({
     color: "#4a4b4c"
   },
   Title: {
-    fontSize: 38,
+    fontSize: 34,
     margin: 10,
     fontWeight: 'bold',
     color: "#4a4b4c"
@@ -383,13 +425,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     margin: 10,
   },
-  Time: {
-    color: "#4a4b4c",
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: wp("1.5%"),
-    marginLeft: wp("1.5%"),
-  },
+
   Date: {
     fontSize: 22,
     color: "#4a4b4c",
@@ -413,9 +449,9 @@ const styles = StyleSheet.create({
    borderRadius:10,
   },
   DateAndTime:{
+  width:"100%",
   flex:1,
   flexDirection: 'row',
-  justifyContent: 'space-between',
   margin:10,
   }
 });

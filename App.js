@@ -11,6 +11,7 @@ state = {
 };
 
 render() {
+  console.disableYellowBox = true;
   if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
     return (
       <AppLoading
@@ -33,10 +34,12 @@ render() {
     return Promise.all([
       Asset.loadAsync([
         require('./assets/images/mamma.jpg'),
-        require('./assets/images/coolcool.png'),
-        require('./assets/images/giphy.gif'),
+        require('./assets/images/coolcool2.png'),
         require('./assets/images/hwlogo.png'),
         require('./assets/images/Register.png'),
+        require('./assets/images/file.png'),
+        require('./assets/images/Notification.png'),
+        require('./assets/images/notify.png'),
         require('./assets/images/heriot-watt.png'),
         require('./assets/images/heriot-watt-opac.png'),
         require('./assets/images/ulisse.png'),
@@ -47,6 +50,7 @@ render() {
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        'noteworthy': require('./assets/fonts/Noteworthy-Lt.ttf'),
       }),
     ]);
   };
